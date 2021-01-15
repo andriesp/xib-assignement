@@ -1,7 +1,7 @@
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\Team.java
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\TeamRepository.java
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\LoadTestData.java
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\AgentRepository.java
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\Agent.java
-C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\AgentController.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\model\Agent.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\model\Team.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\repository\TeamRepository.java
 C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\AssessmentApplication.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\repository\AgentRepository.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\controller\AgentController.java
+C:\Users\User-Pc\dev\interview\xib\assessment-public\src\main\java\com\xib\assessment\service\LoadTestData.java

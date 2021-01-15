@@ -1,5 +1,6 @@
-package com.xib.assessment;
+package com.xib.assessment.controller;
 
+import com.xib.assessment.model.Agent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
