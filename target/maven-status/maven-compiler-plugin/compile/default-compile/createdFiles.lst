@@ -1,7 +1,0 @@
-com\xib\assessment\repository\AgentRepository.class
-com\xib\assessment\AssessmentApplication.class
-com\xib\assessment\model\Agent.class
-com\xib\assessment\repository\TeamRepository.class
-com\xib\assessment\model\Team.class
-com\xib\assessment\service\LoadTestData.class
-com\xib\assessment\controller\AgentController.class

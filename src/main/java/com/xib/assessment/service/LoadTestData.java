@@ -4,13 +4,16 @@ import com.xib.assessment.model.Agent;
 import com.xib.assessment.model.Team;
 import com.xib.assessment.repository.AgentRepository;
 import com.xib.assessment.repository.TeamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 @Component
+@Slf4j
 public class LoadTestData {
     @Autowired
     AgentRepository agentRepository;
@@ -21,6 +24,7 @@ public class LoadTestData {
     @PostConstruct
     @Transactional
     public void execute() {
+        log.info("About to initialize starting data");
         Team team1 = createTeam("Marvel");
         Team team2 = createTeam("DC");
 
