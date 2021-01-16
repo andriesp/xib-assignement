@@ -11,5 +11,7 @@ public interface AgentService {
 
     List<Agent> getAllAgents() throws InternalServerException;
 
+    List<Agent> findAgentsByPaging(int page, int size) throws InternalServerException;
+
     Long createAgent(AgentDTO agentDTO) throws InternalServerException;
 }

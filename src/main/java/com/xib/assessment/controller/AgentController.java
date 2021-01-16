@@ -22,9 +22,11 @@ public class AgentController {
         return okResponse(agentService.findAgentById(id));
     }
 
-    @GetMapping("agents")
-    public ResponseEntity<List<Agent>> findAllAgents() throws InternalServerException {
-        return okResponse(agentService.getAllAgents());
+    @GetMapping(value = "agents", params = {"page", "size"})
+    public ResponseEntity<List<Agent>> findAllAgents(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) throws InternalServerException {
+        return okResponse(agentService.findAgentsByPaging(page, size));
     }
 
     @PostMapping(value = "agent", produces = "application/json", consumes = "application/json")

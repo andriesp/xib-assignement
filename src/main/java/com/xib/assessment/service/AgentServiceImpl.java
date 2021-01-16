@@ -8,6 +8,8 @@ import com.xib.assessment.repository.AgentRepository;
 import com.xib.assessment.validation.CustomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,10 +37,28 @@ public class AgentServiceImpl implements AgentService {
 
     }
 
+    /**
+     * @return A list of agents.
+     * @throws InternalServerException If any server related issues.
+     * @deprecated Deprecated due to performance issues. Use {@link AgentService#findAgentsByPaging(int, int)}.
+     */
+    @Deprecated
     @Override
     public List<Agent> getAllAgents() throws InternalServerException {
         try {
-            return repository.findAll();
+            return (List<Agent>) repository.findAll();
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding agents";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
+    }
+
+    @Override
+    public List<Agent> findAgentsByPaging(int page, int size) throws InternalServerException {
+        try {
+            Page<Agent> paging = repository.findAll(PageRequest.of(page, size));
+            return paging.toList();
         } catch (Exception exception) {
             String message = "Unexpected error occurred finding agents";
             log.error(String.format("%s", message));
