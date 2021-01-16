@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,5 +21,5 @@ public class Manager extends Employee {
             joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "manager_id",
                     referencedColumnName = "id"))
-    private List<Team> teams;
+    private Set<Team> teams;
 }

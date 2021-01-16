@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +52,17 @@ public class TeamServiceImpl implements TeamService {
         validator.validate(teamDTO);
 
         return null;
+    }
+
+    @Override
+    public List<Team> findByIds(Set<Long> ids) throws InternalServerException {
+        try {
+            return repository.findAllById(ids);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding teams by ids";
+            log.error(String.format("%s details %s", message, exception.getMessage()));
+            throw new InternalServerException(message);
+        }
     }
 
 }

@@ -2,10 +2,10 @@ package com.xib.assessment.service;
 
 import com.xib.assessment.dto.TeamDTO;
 import com.xib.assessment.exception.InternalServerException;
-import com.xib.assessment.model.Agent;
 import com.xib.assessment.model.Team;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TeamService {
     Team findTeamById(Long id) throws InternalServerException;
@@ -13,4 +13,6 @@ public interface TeamService {
     List<Team> getAllTeams() throws InternalServerException;
 
     Long createTeam(TeamDTO agentDTO) throws InternalServerException;
+
+    List<Team> findByIds(Set<Long> ids) throws InternalServerException;
 }

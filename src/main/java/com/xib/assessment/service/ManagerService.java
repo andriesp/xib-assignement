@@ -5,7 +5,7 @@ import com.xib.assessment.exception.InternalServerException;
 import com.xib.assessment.model.Manager;
 
 public interface ManagerService {
-    Manager findAgentById(Long id) throws InternalServerException;
+    Manager findManagerById(Long id) throws InternalServerException;
 
-    Long createManager(ManagerDTO managerDTO) throws InternalServerException;
+    Manager createManager(ManagerDTO managerDTO) throws InternalServerException;
 }

@@ -40,6 +40,14 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
         return buildResponse(errorResponse);
     }
 
+    @ExceptionHandler({ConflictException.class})
+    protected ResponseEntity<Object> handleConflict(Exception exception) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setMessage(exception.getMessage());
+        return buildResponse(errorResponse);
+    }
+
     @ExceptionHandler({InternalServerException.class})
     protected ResponseEntity<Object> handleInternalServer(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse();
