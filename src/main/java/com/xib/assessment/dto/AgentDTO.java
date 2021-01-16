@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AgentDTO {
+    private Long id;
     @NotBlank(message = "Firstname is required.")
     private String firstName;
     @NotBlank(message = "Lastname is required.")

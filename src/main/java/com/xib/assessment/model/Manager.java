@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,4 +18,7 @@ public class Manager extends Employee {
     @Id
     @GeneratedValue
     private Long id;
+
+    @OneToMany(mappedBy = "team")
+    private Set<TeamManagement> teams;
 }

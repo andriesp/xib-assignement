@@ -4,7 +4,9 @@ import com.xib.assessment.dto.AgentDTO;
 import com.xib.assessment.exception.InternalServerException;
 import com.xib.assessment.exception.NotFoundException;
 import com.xib.assessment.model.Agent;
+import com.xib.assessment.model.Team;
 import com.xib.assessment.repository.AgentRepository;
+import com.xib.assessment.translator.AgentTranslator;
 import com.xib.assessment.validation.CustomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +26,7 @@ public class AgentServiceImpl implements AgentService {
 
     private final AgentRepository repository;
     private final CustomValidator validator;
+    private final TeamService teamService;
 
     @Override
     public Agent findAgentById(Long id) throws InternalServerException {
@@ -70,9 +74,26 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public Long createAgent(AgentDTO agentDTO) throws InternalServerException {
-        validator.validate(agentDTO);
+    public Agent createAgent(AgentDTO agentDTO) throws InternalServerException {
+        try {
+            validator.validate(agentDTO);
+            Optional<Agent> optionalAgent = AgentTranslator.translate(agentDTO, null);
+            if (optionalAgent.isPresent()) {
+                return repository.save(optionalAgent.get());
+            }
+            throw new ValidationException("Agent is required.");
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding agents";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
+    }
 
-        return null;
+    @Override
+    public Agent assignTeam(Long teamId, Long agentId) throws InternalServerException {
+        Agent agent = findAgentById(agentId);
+        Team team = teamService.findTeamById(teamId);
+        agent.setTeam(team);
+        return agent;
     }
 }

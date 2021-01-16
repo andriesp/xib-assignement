@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -14,4 +15,5 @@ public class ManagerDTO {
     private String lastName;
     @NotBlank(message = "Id number is required.")
     private String idNumber;
+    private Set<Long> teamIds;
 }
