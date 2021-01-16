@@ -15,6 +15,6 @@ public interface AgentService {
 
     Agent createAgent(AgentDTO agentDTO) throws InternalServerException;
 
-    Agent assignTeam(Long teamId, Long agentId) throws InternalServerException;
+    Agent assignTeam(Long agentId, Long teamId) throws InternalServerException;
 
 }

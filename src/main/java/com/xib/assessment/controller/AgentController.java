@@ -4,7 +4,6 @@ import com.xib.assessment.dto.AgentDTO;
 import com.xib.assessment.exception.InternalServerException;
 import com.xib.assessment.model.Agent;
 import com.xib.assessment.service.AgentService;
-import com.xib.assessment.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class AgentController extends BaseController {
-
     private final AgentService agentService;
-    private final TeamService teamService;
 
     @GetMapping("agent/{id}")
     public ResponseEntity<Agent> findAgent(@PathVariable("id") Long id) throws InternalServerException {
@@ -40,10 +37,10 @@ public class AgentController extends BaseController {
         return createdResponse(agent.getId());
     }
 
-
-    @PutMapping(value = "team/{id}/agent/{agentId}", produces = "application/json")
-    public ResponseEntity<Agent> assignAgentToTeam(@PathVariable("id") Long teamId, @PathVariable("agentId") Long agentId) throws InternalServerException {
-        return okResponse(agentService.assignTeam(teamId, agentId));
+    // We assign an agent to a team not a team to an agent, therefore the api resource changes from team/id/
+    @PutMapping(value = "agent/{id}/team/{teamId}", produces = "application/json")
+    public ResponseEntity<Agent> assignAgentToTeam(@PathVariable("id") Long agentId, @PathVariable("teamId") Long teamId) throws InternalServerException {
+        return okResponse(agentService.assignTeam(agentId, teamId));
     }
 
 }

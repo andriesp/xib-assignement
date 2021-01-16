@@ -83,7 +83,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public Agent assignTeam(Long teamId, Long agentId) throws InternalServerException {
+    public Agent assignTeam(Long agentId, Long teamId) throws InternalServerException {
         Agent agent = findAgentById(agentId);
         Team team = teamService.findTeamById(teamId);
         agent.setTeam(team);
