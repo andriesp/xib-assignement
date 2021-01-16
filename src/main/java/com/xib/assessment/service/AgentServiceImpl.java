@@ -1,9 +1,11 @@
 package com.xib.assessment.service;
 
+import com.xib.assessment.dto.AgentDTO;
 import com.xib.assessment.exception.InternalServerException;
 import com.xib.assessment.exception.NotFoundException;
 import com.xib.assessment.model.Agent;
 import com.xib.assessment.repository.AgentRepository;
+import com.xib.assessment.validation.CustomValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class AgentServiceImpl implements AgentService {
 
     private final AgentRepository repository;
+    private final CustomValidator validator;
 
     @Override
     public Agent findAgentById(Long id) throws InternalServerException {
@@ -41,5 +44,12 @@ public class AgentServiceImpl implements AgentService {
             log.error(String.format("%s", message));
             throw new InternalServerException(message);
         }
+    }
+
+    @Override
+    public Long createAgent(AgentDTO agentDTO) throws InternalServerException {
+        validator.validate(agentDTO);
+
+        return null;
     }
 }
