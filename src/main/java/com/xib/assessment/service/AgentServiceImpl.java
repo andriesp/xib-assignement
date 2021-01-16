@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +30,16 @@ public class AgentServiceImpl implements AgentService {
             throw new InternalServerException(message);
         }
 
+    }
+
+    @Override
+    public List<Agent> getAllAgents() throws InternalServerException {
+        try {
+            return repository.findAll();
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding agents";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
     }
 }

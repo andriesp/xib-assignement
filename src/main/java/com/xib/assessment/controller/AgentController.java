@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class AgentController {
@@ -20,7 +22,12 @@ public class AgentController {
         return okResponse(agentService.findAgentById(id));
     }
 
-    private ResponseEntity<Agent> okResponse(Agent object) {
+    @GetMapping("agents")
+    public ResponseEntity<List<Agent>> findAllAgents() throws InternalServerException {
+        return okResponse(agentService.getAllAgents());
+    }
+
+    private <T> ResponseEntity<T> okResponse(T object) {
         return ResponseEntity.ok(object);
     }
 
