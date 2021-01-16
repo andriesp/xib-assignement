@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class TeamController {
+public class TeamController extends BaseController {
 
     private final TeamService teamService;
 
@@ -31,14 +30,4 @@ public class TeamController {
     public ResponseEntity<Team> createTeam(@RequestBody TeamDTO teamDTO) throws InternalServerException {
         return createdResponse(teamService.createTeam(teamDTO));
     }
-
-    private <T> ResponseEntity<T> okResponse(T object) {
-        return ResponseEntity.ok(object);
-    }
-
-    private <T> ResponseEntity<T> createdResponse(Long id) {
-        return ResponseEntity.created(URI.create(String.format("team/%s", id))).build();
-    }
-
-
 }

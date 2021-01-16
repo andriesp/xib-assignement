@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class AgentController {
+public class AgentController extends BaseController {
 
     private final AgentService agentService;
 
@@ -33,14 +32,5 @@ public class AgentController {
     public ResponseEntity<Agent> createAgent(@RequestBody AgentDTO agentDTO) throws InternalServerException {
         return createdResponse(agentService.createAgent(agentDTO));
     }
-
-    private <T> ResponseEntity<T> okResponse(T object) {
-        return ResponseEntity.ok(object);
-    }
-
-    private <T> ResponseEntity<T> createdResponse(Long id) {
-        return ResponseEntity.created(URI.create(String.format("agent/%s", id))).build();
-    }
-
 
 }
