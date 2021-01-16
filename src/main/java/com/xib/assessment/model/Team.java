@@ -5,9 +5,9 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,9 +17,6 @@ public class Team implements Serializable {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "manager")
-    private Set<TeamManagement> managers;
-
-    @OneToMany(mappedBy = "team")
-    private Set<Agent> agents;
+    @ManyToMany(mappedBy = "teams")
+    private List<Manager> managers;
 }

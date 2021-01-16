@@ -30,16 +30,9 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public Agent findAgentById(Long id) throws InternalServerException {
-        try {
-            Optional<Agent> agentOptional = repository.findById(id);
-            if (agentOptional.isPresent()) return agentOptional.get();
-            throw new NotFoundException("Agent Not Found");
-        } catch (Exception exception) {
-            String message = "Unexpected error occurred finding agent by id";
-            log.error(String.format("%s %s", message, id));
-            throw new InternalServerException(message);
-        }
-
+        Optional<Agent> agentOptional = findById(id);
+        if (agentOptional.isPresent()) return agentOptional.get();
+        throw new NotFoundException("Agent Not Found");
     }
 
     /**
@@ -79,7 +72,7 @@ public class AgentServiceImpl implements AgentService {
             validator.validate(agentDTO);
             Optional<Agent> optionalAgent = AgentTranslator.translate(agentDTO, null);
             if (optionalAgent.isPresent()) {
-                return repository.save(optionalAgent.get());
+                return saveAgent(optionalAgent.get());
             }
             throw new ValidationException("Agent is required.");
         } catch (Exception exception) {
@@ -95,5 +88,25 @@ public class AgentServiceImpl implements AgentService {
         Team team = teamService.findTeamById(teamId);
         agent.setTeam(team);
         return agent;
+    }
+
+    private Agent saveAgent(Agent agent) throws InternalServerException {
+        try {
+            return repository.save(agent);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding agents";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
+    }
+
+    private Optional<Agent> findById(Long id) throws InternalServerException {
+        try {
+            return repository.findById(id);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding agent by id";
+            log.error(String.format("%s %s", message, id));
+            throw new InternalServerException(message);
+        }
     }
 }

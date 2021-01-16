@@ -4,11 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +16,10 @@ public class Manager extends Employee {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "team")
-    private Set<TeamManagement> teams;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "team_management",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "manager_id",
+                    referencedColumnName = "id"))
+    private List<Team> teams;
 }
