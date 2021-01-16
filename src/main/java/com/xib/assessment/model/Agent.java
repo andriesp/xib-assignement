@@ -1,5 +1,6 @@
 package com.xib.assessment.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Agent implements Serializable {
     @Id
     @GeneratedValue
@@ -19,4 +21,15 @@ public class Agent implements Serializable {
     private String idNumber;
     @ManyToOne
     private Team team;
+
+    public Agent() {
+    }
+
+    public Agent(Long id, String firstName, String lastName, String idNumber, Team team) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.idNumber = idNumber;
+        this.team = team;
+    }
 }

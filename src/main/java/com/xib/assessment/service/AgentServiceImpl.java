@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +59,9 @@ public class AgentServiceImpl implements AgentService {
     public List<Agent> findAgentsByPaging(int page, int size) throws InternalServerException {
         try {
             Page<Agent> paging = repository.findAll(PageRequest.of(page, size));
-            return paging.toList();
+            return paging.toList().stream()
+                    .map(agent -> new Agent(agent.getId(), agent.getFirstName(), agent.getLastName(), null, agent.getTeam()))
+                    .collect(Collectors.toList());
         } catch (Exception exception) {
             String message = "Unexpected error occurred finding agents";
             log.error(String.format("%s", message));
