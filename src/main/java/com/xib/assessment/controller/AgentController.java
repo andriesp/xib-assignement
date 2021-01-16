@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class AgentController extends BaseController {
     }
 
     @PostMapping(value = "agent", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Agent> createAgent(@RequestBody AgentDTO agentDTO) throws InternalServerException {
+    public ResponseEntity<Agent> createAgent(@RequestBody @Valid AgentDTO agentDTO) throws InternalServerException {
         return createdResponse(agentService.createAgent(agentDTO));
     }
 

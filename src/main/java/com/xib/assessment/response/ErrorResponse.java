@@ -10,5 +10,12 @@ import java.util.List;
 public class ErrorResponse {
     private int status;
     private String message;
-    private List<ErrorResponse> errors;
+    private List<String> errors;
+
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(int status) {
+        this.status = status;
+    }
 }
