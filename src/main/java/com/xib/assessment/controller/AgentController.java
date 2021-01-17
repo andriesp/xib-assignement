@@ -33,8 +33,7 @@ public class AgentController extends BaseController {
     @PostMapping(value = "agent", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Agent> createAgent(@RequestBody @Valid AgentDTO agentDTO) throws InternalServerException {
         Agent agent = agentService.createAgent(agentDTO);
-        log.info(String.valueOf(agent));
-        return createdResponse(agent.getId());
+        return createdResponse("/agent/{id}", agent.getId(), agent);
     }
 
     // We assign an agent to a team not a team to an agent, therefore the api resource changes from team/id/

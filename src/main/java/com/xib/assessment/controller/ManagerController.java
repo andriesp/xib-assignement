@@ -2,7 +2,6 @@ package com.xib.assessment.controller;
 
 import com.xib.assessment.dto.ManagerDTO;
 import com.xib.assessment.exception.InternalServerException;
-import com.xib.assessment.model.Agent;
 import com.xib.assessment.model.Manager;
 import com.xib.assessment.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +22,16 @@ public class ManagerController extends BaseController {
     }
 
     @PostMapping(value = "manager", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<Agent> createAgent(@RequestBody ManagerDTO managerDTO) throws InternalServerException {
+    public ResponseEntity<Manager> createAgent(@RequestBody ManagerDTO managerDTO) throws InternalServerException {
         Manager manager = managerService.createManager(managerDTO);
-        return createdResponse(manager.getId());
+        return createdResponse("/manager/{id}", manager.getId(), manager);
     }
 
     @PutMapping(value = "manager/{managerId}/team/{teamId}", produces = "application/json")
-    public ResponseEntity<Agent> createAgent(
+    public ResponseEntity<Manager> createAgent(
             @PathVariable("managerId") Long managerId,
             @PathVariable("teamId") Long teamId) throws InternalServerException {
         Manager manager = managerService.assignTeam(managerId, teamId);
-        return createdResponse(manager.getId());
+        return okResponse(manager);
     }
 }
