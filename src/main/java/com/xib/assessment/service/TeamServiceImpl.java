@@ -24,15 +24,9 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team findTeamById(Long id) throws InternalServerException {
-        try {
-            Optional<Team> optionalTeam = repository.findById(id);
-            if (optionalTeam.isPresent()) return optionalTeam.get();
-            throw new NotFoundException("Team Not Found");
-        } catch (Exception exception) {
-            String message = "Unexpected error occurred finding team by id";
-            log.error(String.format("%s %s details %s", message, id, exception.getMessage()));
-            throw new InternalServerException(message);
-        }
+        Optional<Team> optionalTeam = findById(id);
+        if (optionalTeam.isPresent()) return optionalTeam.get();
+        throw new NotFoundException("Team Not Found");
     }
 
     @Override
@@ -59,6 +53,16 @@ public class TeamServiceImpl implements TeamService {
         } catch (Exception exception) {
             String message = "Unexpected error occurred finding teams by ids";
             log.error(String.format("%s details %s", message, exception.getMessage()));
+            throw new InternalServerException(message);
+        }
+    }
+
+    private Optional<Team> findById(Long id) throws InternalServerException {
+        try {
+            return repository.findById(id);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding team by id";
+            log.error(String.format("%s %s", message, id));
             throw new InternalServerException(message);
         }
     }
