@@ -26,39 +26,26 @@ public class ManagerServiceImpl implements ManagerService {
     private final CustomValidator validator;
     private final TeamService teamService;
 
+
     @Override
     public Manager findManagerById(Long id) throws InternalServerException {
-        try {
-            Optional<Manager> managerOptional = repository.findById(id);
-            if (managerOptional.isPresent()) return managerOptional.get();
-            throw new NotFoundException("Manager Not Found");
-        } catch (Exception exception) {
-            String message = "Unexpected error occurred finding manager by id";
-            log.error(String.format("%s %s", message, id));
-            throw new InternalServerException(message);
-        }
-
+        Optional<Manager> agentOptional = findById(id);
+        if (agentOptional.isPresent()) return agentOptional.get();
+        throw new NotFoundException("Manager Not Found");
     }
 
     @Override
     public Manager createManager(ManagerDTO managerDTO) throws InternalServerException {
-        try {
-            validator.validate(managerDTO);
-            Optional<Manager> managerOptional = repository.findByIdNumber(managerDTO.getIdNumber());
-            if (managerOptional.isPresent()) throw new ConflictException("Manager already exist.");
+        validator.validate(managerDTO);
+        Optional<Manager> managerOptional = repository.findByIdNumber(managerDTO.getIdNumber());
+        if (managerOptional.isPresent()) throw new ConflictException("Manager already exist.");
 
-            List<Team> teamsToAssign = teamService.findByIds(managerDTO.getTeamIds());
-            Optional<Manager> optionalManager = ManagerTranslator.translate(managerDTO, teamsToAssign);
-            if (optionalManager.isPresent()) return saveManager(optionalManager.get());
+        List<Team> teamsToAssign = teamService.findByIds(managerDTO.getTeamIds());
+        Optional<Manager> optionalManager = ManagerTranslator.translate(managerDTO, teamsToAssign);
+        if (optionalManager.isPresent()) return saveManager(optionalManager.get());
 
-            throw new ValidationException("Valid manager details are required.");
-        } catch (Exception exception) {
-            String message = "Unexpected error occurred creating a manager";
-            log.error(String.format("%s", message));
-            throw new InternalServerException(message);
-        }
+        throw new ValidationException("Valid manager details are required.");
     }
-
 
     private Manager saveManager(Manager manager) throws InternalServerException {
         try {
@@ -69,4 +56,16 @@ public class ManagerServiceImpl implements ManagerService {
             throw new InternalServerException(message);
         }
     }
+
+    private Optional<Manager> findById(Long id) throws InternalServerException {
+        try {
+            return repository.findById(id);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding manager by id";
+            log.error(String.format("%s %s details %s", message, id, exception.getMessage()));
+            throw new InternalServerException(message);
+        }
+    }
+
+
 }
