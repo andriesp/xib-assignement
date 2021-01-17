@@ -10,6 +10,8 @@ import java.util.Set;
 public interface TeamService {
     Team findTeamById(Long id) throws InternalServerException;
 
+    Team updateTeam(Team team) throws InternalServerException;
+
     List<Team> getAllTeams() throws InternalServerException;
 
     List<Team> getTeamsUnallocatedByType(String allocationType) throws InternalServerException;

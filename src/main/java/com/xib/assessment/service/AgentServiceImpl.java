@@ -28,10 +28,14 @@ public class AgentServiceImpl implements AgentService {
     private final CustomValidator validator;
     private final TeamService teamService;
 
+    private static final String ERROR_MESSAGE = "Unexpected error occurred finding agents";
+
     @Override
     public Agent findAgentById(Long id) throws InternalServerException {
         Optional<Agent> agentOptional = findById(id);
-        if (agentOptional.isPresent()) return agentOptional.get();
+        if (agentOptional.isPresent()) {
+            return transformAgent(agentOptional.get());
+        }
         throw new NotFoundException("Agent Not Found");
     }
 
@@ -46,9 +50,8 @@ public class AgentServiceImpl implements AgentService {
         try {
             return (List<Agent>) repository.findAll();
         } catch (Exception exception) {
-            String message = "Unexpected error occurred finding agents";
-            log.error(String.format("%s", message));
-            throw new InternalServerException(message);
+            log.error(String.format("%s", ERROR_MESSAGE));
+            throw new InternalServerException(ERROR_MESSAGE);
         }
     }
 
@@ -57,29 +60,22 @@ public class AgentServiceImpl implements AgentService {
         try {
             Page<Agent> paging = repository.findAll(PageRequest.of(page, size));
             return paging.toList().stream()
-                    .map(agent -> new Agent(agent.getId(), agent.getFirstName(), agent.getLastName(), null, agent.getTeam()))
+                    .map(this::transformAgent)
                     .collect(Collectors.toList());
         } catch (Exception exception) {
-            String message = "Unexpected error occurred finding agents";
-            log.error(String.format("%s", message));
-            throw new InternalServerException(message);
+            log.error(String.format("%s", ERROR_MESSAGE));
+            throw new InternalServerException(ERROR_MESSAGE);
         }
     }
 
     @Override
     public Agent createAgent(AgentDTO agentDTO) throws InternalServerException {
-        try {
-            validator.validate(agentDTO);
-            Optional<Agent> optionalAgent = AgentTranslator.translate(agentDTO, null);
-            if (optionalAgent.isPresent()) {
-                return saveAgent(optionalAgent.get());
-            }
-            throw new ValidationException("Agent is required.");
-        } catch (Exception exception) {
-            String message = "Unexpected error occurred finding agents";
-            log.error(String.format("%s", message));
-            throw new InternalServerException(message);
+        validator.validate(agentDTO);
+        Optional<Agent> optionalAgent = AgentTranslator.translate(agentDTO, null);
+        if (optionalAgent.isPresent()) {
+            return saveAgent(optionalAgent.get());
         }
+        throw new ValidationException("Agent is required.");
     }
 
     @Override
@@ -94,7 +90,7 @@ public class AgentServiceImpl implements AgentService {
         try {
             return repository.save(agent);
         } catch (Exception exception) {
-            String message = "Unexpected error occurred finding agents";
+            String message = "Unexpected error occurred saving agent";
             log.error(String.format("%s", message));
             throw new InternalServerException(message);
         }
@@ -109,4 +105,10 @@ public class AgentServiceImpl implements AgentService {
             throw new InternalServerException(message);
         }
     }
+
+    private Agent transformAgent(Agent agent) {
+        agent.getTeam().getManagers().forEach(m -> m.setTeams(null));
+        return agent;
+    }
+
 }

@@ -6,15 +6,16 @@ import com.xib.assessment.exception.NotFoundException;
 import com.xib.assessment.model.Team;
 import com.xib.assessment.repository.TeamRepository;
 import com.xib.assessment.validation.CustomValidator;
-import jdk.internal.joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public Team updateTeam(Team team) throws InternalServerException {
+        return saveTeam(team);
+    }
+
+    @Override
     public List<Team> getAllTeams() throws InternalServerException {
         try {
             return repository.findAll();
@@ -45,13 +51,28 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<Team> getTeamsUnallocatedByType(String allocationType) throws InternalServerException {
         try {
-            if (Strings.isNullOrEmpty(allocationType)) return repository.findTeamsUnassigned();
+            List<Team> results;
+            if (StringUtils.isBlank(allocationType)) return Collections.emptyList();
+            if (allocationType.equalsIgnoreCase("manager")) {
+                results = repository.findUnallocatedTeamsByManager();
+                return transformTeams(results);
+            }
+            if (allocationType.equalsIgnoreCase("agent")) {
+                results = repository.findUnallocatedTeamsByAgent();
+                return transformTeams(results);
+            }
             return Collections.emptyList();
         } catch (Exception exception) {
-            String message = "Unexpected error occurred finding teams";
-            log.error(String.format("%s", message));
+            String message = "Unexpected error occurred finding teams by allocationType ";
+            log.error(String.format("%s allocationType %s", message, allocationType));
             throw new InternalServerException(message);
         }
+    }
+
+    private List<Team> transformTeams(List<Team> teams) {
+        return teams.stream()
+                .map(team -> new Team(team.getId(), team.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

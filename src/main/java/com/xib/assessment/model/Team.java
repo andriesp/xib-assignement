@@ -29,4 +29,9 @@ public class Team implements Serializable {
         this.name = name;
     }
 
+    public Team(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
 }

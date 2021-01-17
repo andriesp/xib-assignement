@@ -31,9 +31,7 @@ public class ManagerServiceImpl implements ManagerService {
     public Manager findManagerById(Long id) throws InternalServerException {
         Optional<Manager> agentOptional = findById(id);
         if (agentOptional.isPresent()) {
-            Manager manager = agentOptional.get();
-            manager.getTeams().forEach(t -> t.setManagers(null));
-            return manager;
+            return transformManager(agentOptional.get());
         }
         throw new NotFoundException("Manager Not Found");
     }
@@ -46,7 +44,10 @@ public class ManagerServiceImpl implements ManagerService {
 
         List<Team> teamsToAssign = teamService.findByIds(managerDTO.getTeamIds());
         Optional<Manager> optionalManager = ManagerTranslator.translate(managerDTO, teamsToAssign);
-        if (optionalManager.isPresent()) return saveManager(optionalManager.get());
+        if (optionalManager.isPresent()) {
+            Manager manager = saveManager(optionalManager.get());
+            return transformManager(manager);
+        }
 
         throw new ValidationException("Valid manager details are required.");
     }
@@ -54,14 +55,19 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager assignTeam(Long managerId, Long teamId) throws InternalServerException {
         Manager manager = findManagerById(managerId);
-        if (manager.getTeams().size() > 1) throw new ValidationException("Manager already assigned 2 teams");
+        if (manager.getTeams().size() > 1) throw new ConflictException("Manager already assigned 2 teams");
 
         Team team = teamService.findTeamById(teamId);
         manager.getTeams().add(team);
 
-        Manager savedManager = saveManager(manager);
-        savedManager.getTeams().forEach(t -> t.setManagers(null));
-        return savedManager;
+        team.getManagers().add(manager);
+        teamService.updateTeam(team);
+        return transformManager(manager);
+    }
+
+    private Manager transformManager(Manager manager) {
+        manager.getTeams().forEach(t -> t.setManagers(null));
+        return manager;
     }
 
     private Manager saveManager(Manager manager) throws InternalServerException {
