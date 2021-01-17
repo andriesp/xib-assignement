@@ -6,10 +6,12 @@ import com.xib.assessment.exception.NotFoundException;
 import com.xib.assessment.model.Team;
 import com.xib.assessment.repository.TeamRepository;
 import com.xib.assessment.validation.CustomValidator;
+import jdk.internal.joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +35,18 @@ public class TeamServiceImpl implements TeamService {
     public List<Team> getAllTeams() throws InternalServerException {
         try {
             return repository.findAll();
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred finding teams";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
+    }
+
+    @Override
+    public List<Team> getTeamsUnallocatedByType(String allocationType) throws InternalServerException {
+        try {
+            if (Strings.isNullOrEmpty(allocationType)) return repository.findTeamsUnassigned();
+            return Collections.emptyList();
         } catch (Exception exception) {
             String message = "Unexpected error occurred finding teams";
             log.error(String.format("%s", message));

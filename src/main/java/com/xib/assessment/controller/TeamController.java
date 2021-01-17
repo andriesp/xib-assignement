@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -19,6 +20,11 @@ public class TeamController extends BaseController {
     @GetMapping("team/{id}")
     public ResponseEntity<Team> findTeamById(@PathVariable("id") Long id) throws InternalServerException {
         return okResponse(teamService.findTeamById(id));
+    }
+
+    @GetMapping("teams")
+    public ResponseEntity<List<Team>> findUnallocatedTeams(@PathParam("queryType") String queryType) throws InternalServerException {
+        return okResponse(teamService.getTeamsUnallocatedByType(queryType));
     }
 
     @GetMapping("team")

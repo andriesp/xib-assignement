@@ -12,6 +12,8 @@ public interface TeamService {
 
     List<Team> getAllTeams() throws InternalServerException;
 
+    List<Team> getTeamsUnallocatedByType(String allocationType) throws InternalServerException;
+
     Team createTeam(TeamDTO teamDTO) throws InternalServerException;
 
     List<Team> findByIds(Set<Long> ids) throws InternalServerException;
