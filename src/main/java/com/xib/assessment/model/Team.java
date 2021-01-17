@@ -3,7 +3,10 @@ package com.xib.assessment.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,4 +21,12 @@ public class Team implements Serializable {
 
     @ManyToMany(mappedBy = "teams")
     private List<Manager> managers;
+
+    public Team() {
+    }
+
+    public Team(String name) {
+        this.name = name;
+    }
+
 }

@@ -28,6 +28,7 @@ public class TeamController extends BaseController {
 
     @PostMapping(value = "team", produces = "application/json", consumes = "application/json")
     public ResponseEntity<Team> createTeam(@RequestBody TeamDTO teamDTO) throws InternalServerException {
-        return createdResponse(teamService.createTeam(teamDTO));
+        Team team = teamService.createTeam(teamDTO);
+        return createdResponse(team.getId());
     }
 }

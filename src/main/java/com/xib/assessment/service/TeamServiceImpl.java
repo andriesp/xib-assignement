@@ -25,15 +25,14 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team findTeamById(Long id) throws InternalServerException {
         try {
-            Optional<Team> agentOptional = repository.findById(id);
-            if (agentOptional.isPresent()) return agentOptional.get();
+            Optional<Team> optionalTeam = repository.findById(id);
+            if (optionalTeam.isPresent()) return optionalTeam.get();
             throw new NotFoundException("Team Not Found");
         } catch (Exception exception) {
             String message = "Unexpected error occurred finding team by id";
             log.error(String.format("%s %s details %s", message, id, exception.getMessage()));
             throw new InternalServerException(message);
         }
-
     }
 
     @Override
@@ -48,10 +47,9 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Long createTeam(TeamDTO teamDTO) throws InternalServerException {
+    public Team createTeam(TeamDTO teamDTO) throws InternalServerException {
         validator.validate(teamDTO);
-
-        return null;
+        return saveTeam(new Team(teamDTO.getName()));
     }
 
     @Override
@@ -65,4 +63,13 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
+    private Team saveTeam(Team team) throws InternalServerException {
+        try {
+            return repository.save(team);
+        } catch (Exception exception) {
+            String message = "Unexpected error occurred saving team";
+            log.error(String.format("%s", message));
+            throw new InternalServerException(message);
+        }
+    }
 }

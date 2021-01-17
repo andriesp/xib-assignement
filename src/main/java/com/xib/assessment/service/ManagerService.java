@@ -8,4 +8,6 @@ public interface ManagerService {
     Manager findManagerById(Long id) throws InternalServerException;
 
     Manager createManager(ManagerDTO managerDTO) throws InternalServerException;
+
+    Manager assignTeam(Long managerId, Long teamId) throws InternalServerException;
 }

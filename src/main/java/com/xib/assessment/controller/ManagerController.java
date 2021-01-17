@@ -27,4 +27,12 @@ public class ManagerController extends BaseController {
         Manager manager = managerService.createManager(managerDTO);
         return createdResponse(manager.getId());
     }
+
+    @PutMapping(value = "manager/{managerId}/team/{teamId}", produces = "application/json")
+    public ResponseEntity<Agent> createAgent(
+            @PathVariable("managerId") Long managerId,
+            @PathVariable("teamId") Long teamId) throws InternalServerException {
+        Manager manager = managerService.assignTeam(managerId, teamId);
+        return createdResponse(manager.getId());
+    }
 }

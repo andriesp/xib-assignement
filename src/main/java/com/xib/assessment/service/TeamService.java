@@ -12,7 +12,7 @@ public interface TeamService {
 
     List<Team> getAllTeams() throws InternalServerException;
 
-    Long createTeam(TeamDTO agentDTO) throws InternalServerException;
+    Team createTeam(TeamDTO teamDTO) throws InternalServerException;
 
     List<Team> findByIds(Set<Long> ids) throws InternalServerException;
 }
